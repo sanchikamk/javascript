@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+  .countdown-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    font-family: omnes-pro, sans-serif;
+    font-size: 40px;
+    font-weight: 500;
+    color: #5e7072;
+  }
+</style>
+
+<body>
+
+  <button onclick="goBack();">BACK</button>
+
+  <div class="countdown-wrap">
+    <p id="countdownMsg" class="countdown-msg"></p>
+    <p id="countdown" class="countdown-timer"></p>
+  </div>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const countdownMsg = params.get('countdownMsg');
+
+    document.getElementById('countdownMsg').innerText = countdownMsg;
+
+    const targetDateTime = params.get('targetDateTime');
+    const targetTime = new Date(targetDateTime).getTime();
+
+    const countdownInterval = setInterval(function () {
+      const now = new Date().getTime();
+      const remainingTime = targetTime - now;
+
+      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+      //const milliseconds = Math.floor(remainingTime % 1000);
+
+      let countdownText = '';
+
+      if (days > 0) {
+        countdownText += `${days}days `;
+      } else if (hours > 0) {
+        countdownText += `${hours}hours `;
+      } else if (minutes > 0) {
+        countdownText += `${minutes} minutes `;
+      }
+      countdownText += `${seconds} seconds `;
+
+      document.getElementById('countdown').innerHTML = countdownText;
+
+      if (remainingTime <= 0) {
+        clearInterval(countdown);
+        document.getElementById('countdown').innerHTML = "Countdown Expired!!"
+      }
+
+    }, 1000);
+
+
+
+  </script>
+
+</body>
+
+
+
+</html>
